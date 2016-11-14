@@ -11,18 +11,39 @@ class EchoHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
     """
-    S_SERVER = int(sys.argv[1]
-    S_PORT = int(sys.argv[2]
+    SERVER = (sys.argv[1])
+    PORT = int(sys.argv[2])
+    song = (sys.argv[3])
 
+    MP3 = sys.argv[3][-3:]
 
+    #Cuando añadamos la cancion habra que poner != 4
+    if len(sys.argv) != 4:
+        if sys.argv[3][-3:] != "mp3":
+            sys.exit("Usage: python server.py IP port audio_file")
+    
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
-        self.wfile.write(b"Hemos recibido tu peticion")
+        self.wfile.write(b"Hemos recibido tu peticion\r\n\r\n")
+        text = self.rfile.read()
+        
         while 1:
             # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
-            print("El cliente nos manda " + line.decode('utf-8'))
+            print("El cliente nos manda " + text.decode('utf-8'))
+            LINE = text.decode('utf-8')
+            Words_LINES = LINE.split()
+            REQUEST = Words_LINES[0]
+            print("La peticion es: ", REQUEST )
+            print("Listening...")
 
+            if REQUEST == 'Invite':
+                answer100 = b"SIP/2.0 100 Trying\r\n\r\n"
+                answer180 = b"SIP/2.0 180 Ring\r\n\r\n"
+                ANSWER = answer100 + answer180
+                self.wfile.write(ANSWER)
+                #my_socket.send(bytes(ANSWER, 'utf-8') + b'\r\n')
+            
             # Si no hay más líneas salimos del bucle infinito
             if not line:
                 break
@@ -30,6 +51,6 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
     #Los ' ' son el localhost del servidor que en esta practica hay que especificarlo
-    serv = socketserver.UDPServer((sys.argv[1]), int(sys.argv[2]), EchoHandler)
+    serv = socketserver.UDPServer(('', int(sys.argv[2])), EchoHandler)
     print("Lanzando servidor UDP de eco...")
     serv.serve_forever()
