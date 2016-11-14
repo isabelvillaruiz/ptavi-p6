@@ -15,12 +15,18 @@ import sys
 INFO = sys.argv[2]
 INFO1 = INFO.split("@")
 INFO2 = INFO1[1].split(":")
+
+
 PORT = int(INFO2[1])
 SERVER = (INFO2[0])
+USER = (INFO1[0])
 
 
-print("Este es el servidor" , SERVER)
-print("Este es el puerto" , PORT)
+print("ESTAS SON LAS VARIABLES QUE ME DAN:")
+print("Este es el servidor: " , SERVER)
+print("Este es el puerto: " , PORT)
+print("Este es el usuario: " , USER)
+
 
 REQUEST = sys.argv[1]
 
@@ -29,17 +35,9 @@ if len(sys.argv) != 3:
     sys.exit("Usage: python client.py method receiver@IP:SIPport")
 
 # Contenido que vamos a enviar
-'''
-if REQUEST == 'Invite':
-    
-elif REQUEST == 'Bye':
 
-'''
-
- 
-
-
-LINE = '¡Hola mundo!'
+LINE = REQUEST + " sip: " + USER + "@" + SERVER + "SIP/2.0\r\n"
+#LINE = '¡SOY BATMAN!'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
