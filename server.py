@@ -5,12 +5,15 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 """
 
 import socketserver
-
+import sys
 
 class EchoHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
     """
+    S_SERVER = int(sys.argv[1]
+    S_PORT = int(sys.argv[2]
+
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
@@ -26,6 +29,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
-    serv = socketserver.UDPServer(('', 6001), EchoHandler)
+    #Los ' ' son el localhost del servidor que en esta practica hay que especificarlo
+    serv = socketserver.UDPServer((sys.argv[1]), int(sys.argv[2]), EchoHandler)
     print("Lanzando servidor UDP de eco...")
     serv.serve_forever()
