@@ -36,7 +36,8 @@ if len(sys.argv) != 3:
 
 # Contenido que vamos a enviar
 
-LINE = REQUEST + " sip: " + USER + "@" + SERVER + "SIP/2.0\r\n"
+LINE_SIP = " sip:" + USER + "@" + SERVER + " SIP/2.0\r\n\r\n"
+LINE = REQUEST + LINE_SIP
 #LINE = '¡SOY BATMAN!'
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
@@ -48,7 +49,26 @@ print("Enviando: " + LINE)
 my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
 data = my_socket.recv(1024)
 
-print('Recibido -- ', data.decode('utf-8'))
+print(data.decode('utf-8'))
+#[0:-1] Te coge desde el principio hasta el final menos el ultimo
+WERECEIVE = data.decode('utf-8').split('\r\n\r\n')[0:-1]
+
+
+MUSTRECEIVE100 = ("SIP/2.0 100 Trying")
+MUSTRECEIVE180 = ("SIP/2.0 180 Ring")
+MUSTRECEIVE200 = ("SIP/2.0 200 OK")
+MUSTRECEIVE = [MUSTRECEIVE100, MUSTRECEIVE180, MUSTRECEIVE200]
+
+
+if WERECEIVE == MUSTRECEIVE:
+    LINE_ACK = "ACK" + LINE_SIP
+    #Linea inventada
+    print("Enviando ACK...", LINE_ACK)
+    my_socket.send(bytes(LINE_ACK, 'utf-8') + b'\r\n')
+    data = my_socket.recv(1024)
+    
+
+print('Recibido -- ', WERECEIVE)
 print("Terminando socket...")
 
 # Cerramos todo
