@@ -5,7 +5,7 @@ Programa cliente que abre un socket a un servidor
 """
 
 import socket
-import sys 
+import sys
 
 # Cliente UDP simple.
 
@@ -23,9 +23,9 @@ USER = (INFO1[0])
 
 
 print("ESTAS SON LAS VARIABLES QUE ME DAN:")
-print("Este es el servidor: " , SERVER)
-print("Este es el puerto: " , PORT)
-print("Este es el usuario: " , USER)
+print("Este es el servidor: ", SERVER)
+print("Este es el puerto: ", PORT)
+print("Este es el usuario: ", USER)
 
 
 REQUEST = sys.argv[1]
@@ -43,7 +43,7 @@ LINE = REQUEST + LINE_SIP
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-my_socket.connect((SERVER,PORT))
+my_socket.connect((SERVER, PORT))
 
 print("Enviando: " + LINE)
 my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
@@ -66,7 +66,6 @@ if WERECEIVE == MUSTRECEIVE:
     print("Enviando ACK...", LINE_ACK)
     my_socket.send(bytes(LINE_ACK, 'utf-8') + b'\r\n')
     data = my_socket.recv(1024)
-    
 
 print('Recibido -- ', WERECEIVE)
 print("Terminando socket...")
