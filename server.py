@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
-Clase (y programa principal) para un servidor de eco en UDP simple
-"""
+
+"""Clase (y programa principal) para un servidor de eco en UDP simple."""
 
 import socketserver
 import sys
@@ -10,9 +9,8 @@ import os
 
 
 class EchoHandler(socketserver.DatagramRequestHandler):
-    """
-    Echo server class
-    """
+    """Echo server class."""
+
     SERVER = (sys.argv[1])
     PORT = int(sys.argv[2])
     SONG = (sys.argv[3])
@@ -24,9 +22,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             sys.exit("Usage: python server.py IP port audio_file")
 
     def handle(self):
-        # Escribe dirección y puerto del cliente (de tupla client_address)
-        #self.wfile.write(b"Hemos recibido tu peticion\r\n\r\n")
-
+        """Escribe dirección y puerto del cliente (de tupla client_address)."""
         while 1:
             # Leyendo línea a línea lo que nos envía el cliente
             text = self.rfile.read()
@@ -43,9 +39,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 answer180 = b"SIP/2.0 180 Ring\r\n\r\n"
                 answer200 = b"SIP/2.0 200 OK\r\n\r\n"
                 ANSWER = answer100 + answer180 + answer200
-                #self.wfile.write(answer100)
-                #self.wfile.write(answer180)
-                #self.wfile.write(answer200)
+                self.wfile.write(ANSWER)
 
             elif REQUEST == 'ACK':
                 SONG = (sys.argv[3])
@@ -63,4 +57,7 @@ if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
     serv = socketserver.UDPServer((sys.argv[1], int(sys.argv[2])), EchoHandler)
     print("Lanzando servidor UDP de eco...")
-    serv.serve_forever()
+    try:
+        serv.serve_forever()
+    except KeyboardInterrupt:
+        print("Finalizado servidor")
